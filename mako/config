@@ -1,13 +1,24 @@
-font= Mononoki Nerd Font
-background-color=#1a1b26
-progress-color=#bbc2cf
-width= 250
-height=120
+font=JetBrainsMono Nerd Font 11
+background-color=#1a1b26F2
+text-color=#a9b1d6
+progress-color=#7aa2f7
+width=300
+height=200
 icons=1
-padding=20
-border-color=#1a1b26
-border-size=3
-border-radius=3
-default-timeout=33333
+padding=15
+margin=10
+border-size=1
+border-radius=10
+default-timeout=0
+anchor=top-right
 layer=overlay
 
+[urgency=low]
+border-color=#9ece6a
+
+[urgency=normal]
+border-color=#bb9af7
+
+[urgency=high]
+border-color=#f7768e
+default-timeout=0
