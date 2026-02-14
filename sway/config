@@ -1,63 +1,113 @@
+# Default config for sway
+#
+# Copy this to ~/.config/sway/config and edit it to your liking.
+#
+# Read `man 5 sway` for a complete reference.
+
+# Export Wayland env vars to systemd/dbus (needed for xdg-desktop-portal, waybar, etc.)
+# The apt sway package shipped this in /etc/sway/config.d/50-systemd-user.conf.
+# SwayFX from source doesn't include it, so without this line systemd services
+# (like xdg-desktop-portal-gtk) can't connect to Wayland and waybar blocks on startup.
+# Uncomment if /etc/sway/config.d/50-systemd-user.conf is missing:
+#exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY SWAYSOCK DISPLAY XDG_CURRENT_DESKTOP
+
+### Variables
+#
 # Logo key. Use Mod1 for Alt.
 set $mod Mod4
-
 # Home row direction keys, like vim
 set $left h
 set $down j
 set $up k
 set $right l
-
 # Your preferred terminal emulator
-set $term kitty
-
-# Your preferred web browser 
-set $browser Brave
-
+set $term foot
 # Your preferred application launcher
-set $menu dmenu_path | dmenu | xargs swaymsg exec --
+# Note: pass the final command to swaymsg so that the resulting window can be opened
+# on the original workspace that the command was run on.
+set $menu fuzzel
+
+exec_always {
+    gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
+    gsettings set org.gnome.desktop.interface gtk-theme 'Yaru-dark'
+    gsettings set org.gnome.desktop.interface icon-theme 'Papirus-Dark'
+}
+exec export ADW_DEBUG_COLOR_SCHEME=prefer-dark && dbus-update-activation-environment --systemd WAYLAND_DISPLAY SWAYSOCK DISPLAY XDG_CURRENT_DESKTOP ADW_DEBUG_COLOR_SCHEME
+
+include /etc/sway/config-vars.d/*
 
 ### Output configuration
+#
+# Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
+output * bg /home/itay-sadovnik/Pictures/forest.png fill
+# Borders (sway-borders) - requires sway-borders build
+# border_images.focused ~/.config/sway/borders/shadows.png
+# border_images.focused_inactive ~/.config/sway/borders/shadows.png
+# border_images.unfocused ~/.config/sway/borders/shadows.png
+# border_images.urgent ~/.config/sway/borders/shadows.png
 
-# wallpaper 
-#output * bg /home/demus/Wallpaper/001.png fill
-#output * bg /home/demus/Wallpaper/004.png fit
-output * bg /home/demus/Wallpaper/002.png fill
+# SwayFX effects
+shadows enable
+shadow_blur_radius 20
+shadow_color #0000007f
+corner_radius 8
+blur enable
+blur_passes 2
+blur_radius 5
+#
+# Example configuration:
+#
+#   output HDMI-A-1 resolution 1920x1080 position 1920,0
+#swaymsg "gaps inner all set 2; gaps outer all set 2"
+# You can get the names of your outputs by running: swaymsg -t get_outputs
 
-# This is for use with sway-borders
-border_images.focused ~/.config/sway/borders/shadows.png
-border_images.focused_inactive ~/.config/sway/borders/shadows.png
-border_images.unfocused ~/.config/sway/borders/shadows.png
-border_images.urgent ~/.config/sway/borders/shadows.png
+### Idle configuration
+#
+# Example configuration:
+#
+# exec swayidle -w \
+#          timeout 300 'swaylock -f -c 000000' \
+#          timeout 600 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
+#          before-sleep 'swaylock -f -c 000000'
+#
+# This will lock your screen after 300 seconds of inactivity, then turn off
+# your displays after another 300 seconds, and turn your screens back on when
+# resumed. It will also lock your screen before your computer goes to sleep.
 
-#lock screen
-bindsym $mod+p exec swaylock --screenshots --clock --indicator-idle-visible \
-        --indicator-radius 100 \
-        --indicator-thickness 7 \
-        --ignore-empty-password \
-        --ring-color 2a2e38 \
-        --key-hl-color 51afef \
-        --text-color bbc2cf \
-        --line-color 2a2e38 \
-        --inside-color 242730 \
-        --separator-color 00000000 \
-        --fade-in 0.1 \
-        --effect-scale 0.5 --effect-blur 7x3 --effect-scale 2 \
-        --effect-vignette 0.5:0.5 \
+### Input configuration
+#
+# Example configuration:
+#
+#   input "2:14:SynPS/2_Synaptics_TouchPad" {
+#       dwt enabled
+#       tap enabled
+#       natural_scroll enabled
+#       middle_emulation enabled
+#   }
+#
+# You can get the names of your inputs by running: swaymsg -t get_inputs
+# Read `man 5 sway-input` for more information about this section.
 
-	
-# Touchpad (tap to enable configured)
-input 1267:12584:ASUE1301:00_04F3:3128_Touchpad tap enabled
+input * {
+    xkb_layout us,il
+}
 
 ### Key bindings
+#
+# Basics:
+#
     # Start a terminal
     bindsym $mod+Return exec $term
 
     # Kill focused window
-    bindsym $mod+c kill
+    bindsym $mod+Shift+q kill
 
     # Start your launcher
     bindsym $mod+d exec $menu
-    bindsym $mod+Shift+d exec fuzzel
+
+    # Switch keyboard layout
+    bindsym $mod+space input * xkb_switch_layout next
+
     # Drag floating windows by holding down $mod and left mouse button.
     # Resize them with right mouse button + $mod.
     # Despite the name, also works for non-floating windows.
@@ -69,17 +119,8 @@ input 1267:12584:ASUE1301:00_04F3:3128_Touchpad tap enabled
     bindsym $mod+Shift+c reload
 
     # Exit sway (logs you out of your Wayland session)
-    bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
-
-# Brightness controls
- bindsym XF86MonBrightnessUp exec brightnessctl -q set +5% # increase screen brightness
- bindsym XF86MonBrightnessDown exec brightnessctl -q set 5%- # decrease screen brightnes
-
-# Pulse Audio controls
- bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% #increase sound volume
- bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5% #decrease sound volume
- bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle # mute sound
-
+    bindsym $mod+Shift+e exec wlogout
+#
 # Moving around:
 #
     # Move your focus around
@@ -136,8 +177,8 @@ input 1267:12584:ASUE1301:00_04F3:3128_Touchpad tap enabled
     # You can "split" the current object of your focus with
     # $mod+b or $mod+v, for horizontal and vertical splits
     # respectively.
-    bindsym $mod+b splith
-    bindsym $mod+v splitv
+    bindsym $mod+b split h
+    bindsym $mod+v split v
 
     # Switch the current container between different layout styles
     bindsym $mod+s layout stacking
@@ -151,7 +192,7 @@ input 1267:12584:ASUE1301:00_04F3:3128_Touchpad tap enabled
     bindsym $mod+Shift+space floating toggle
 
     # Swap focus between the tiling area and the floating area
-    bindsym $mod+space focus mode_toggle
+    # bindsym $mod+space focus mode_toggle
 
     # Move focus to the parent container
     bindsym $mod+a focus parent
@@ -191,46 +232,54 @@ mode "resize" {
     bindsym Escape mode "default"
 }
 bindsym $mod+r mode "resize"
+bindsym Print exec bash -lc 'f="$(mktemp --suffix=.png)"; grim -g "$(slurp)" "$f" && satty --filename "$f"'
 
 #
 # Status Bar:
 #
 # Read `man 5 sway-bar` for more information about this section.
 bar {
-    #position top
-swaybar_command waybar
- #   status_command while date +'%Y-%m-%d %l:%M:%S %p'; do sleep 1; done
-
+#     position top
+#
+#     # When the status_command prints a new line to stdout, swaybar updates.
+#     # The default just shows the current date and time.
+#     status_command while date +'%Y-%m-%d %X'; do sleep 1; done
+#
+#     colors {
+#         statusline #ffffff
+#         background #323232
+#         inactive_workspace #32323200 #32323200 #5c5c5c
+#     }
+      swaybar_command waybar
 }
 
-#No titlebars
-default_border none 
-for_window [title="^.*"] title_format " "
-#default_border normal 0
-default_floating_border normal 0
 
-#gaps
-gaps inner 15
-gaps horizontal 0 
-gaps vertical 0
+for_window [app_id="com.gabm.satty"] floating enable
 
- # take a screenshot (selection)
+# Borders (thin)
+default_border pixel 2
+default_floating_border pixel 2
 
-   bindsym $mod+Shift+Print exec grim -g "$(slurp)" ~/screenshots/$(date +%Y-%m-%d_%H-%m-%s).png
 
- # take a screenshot (entire)
-    bindsym $mod+Print exec grim -t png ~/screenshots/$(date +%Y-%m-%d_%H-%m-%s).png
 
-#Assigning stuff to Workspaces
-for_window [class="alacritty"] move to workspace 1
-for_window [class="Brave"] move to workspace 2
-for_window [class="discord"] move to workspace 3
-for_window [class="Spotify"] move to workspace 4
+# Apply border style to existing windows on reload
+exec_always swaymsg '[app_id=".*"] border pixel 2'
+exec_always swaymsg '[class=".*"] border pixel 2'
 
-# use xwayland
-xwayland enable
 
-# Manual gaps
+
+# Border colors (subtle focus)
+client.focused   #88C0D0 #88C0D0 #ECEFF4 #88C0D0 #88C0D0
+client.unfocused #3B4252 #3B4252 #D8DEE9 #3B4252 #3B4252
+client.urgent    #BF616A #BF616A #ECEFF4 #BF616A #BF616A
+
+
+include /etc/sway/config.d/*
+
+# Gaps (manual mode)
+gaps inner 2
+gaps outer 2
+
 set $mode_gaps Gaps: (o)uter, (i)nner, (h)orizontal, (v)ertical, (t)op, (r)ight, (b)ottom, (l)eft
 set $mode_gaps_outer Outer Gaps: +|-|0 (local), Shift + +|-|0 (global)
 set $mode_gaps_inner Inner Gaps: +|-|0 (local), Shift + +|-|0 (global)
@@ -240,116 +289,114 @@ set $mode_gaps_top Top Gaps: +|-|0 (local), Shift + +|-|0 (global)
 set $mode_gaps_right Right Gaps: +|-|0 (local), Shift + +|-|0 (global)
 set $mode_gaps_bottom Bottom Gaps: +|-|0 (local), Shift + +|-|0 (global)
 set $mode_gaps_left Left Gaps: +|-|0 (local), Shift + +|-|0 (global)
+
 bindsym $mod+g mode "$mode_gaps"
 
 mode "$mode_gaps" {
-        bindsym o      mode "$mode_gaps_outer"
-        bindsym i      mode "$mode_gaps_inner"
-        bindsym h      mode "$mode_gaps_horiz"
-        bindsym v      mode "$mode_gaps_verti"
-        bindsym t      mode "$mode_gaps_top"
-        bindsym r      mode "$mode_gaps_right"
-        bindsym b      mode "$mode_gaps_bottom"
-        bindsym l      mode "$mode_gaps_left"
-        bindsym Return mode "$mode_gaps"
-        bindsym Escape mode "default"
+    bindsym o      mode "$mode_gaps_outer"
+    bindsym i      mode "$mode_gaps_inner"
+    bindsym h      mode "$mode_gaps_horiz"
+    bindsym v      mode "$mode_gaps_verti"
+    bindsym t      mode "$mode_gaps_top"
+    bindsym r      mode "$mode_gaps_right"
+    bindsym b      mode "$mode_gaps_bottom"
+    bindsym l      mode "$mode_gaps_left"
+    bindsym Return mode "$mode_gaps"
+    bindsym Escape mode "default"
 }
 mode "$mode_gaps_outer" {
-        bindsym plus  gaps outer current plus 5
-        bindsym minus gaps outer current minus 5
-        bindsym 0     gaps outer current set 0
+    bindsym plus  gaps outer current plus 5
+    bindsym minus gaps outer current minus 5
+    bindsym 0     gaps outer current set 0
 
-        bindsym Shift+plus  gaps outer all plus 5
-        bindsym Shift+minus gaps outer all minus 5
-        bindsym Shift+0     gaps outer all set 0
+    bindsym Shift+plus  gaps outer all plus 5
+    bindsym Shift+minus gaps outer all minus 5
+    bindsym Shift+0     gaps outer all set 0
 
-        bindsym Return mode "$mode_gaps"
-        bindsym Escape mode "default"
+    bindsym Return mode "$mode_gaps"
+    bindsym Escape mode "default"
 }
 mode "$mode_gaps_inner" {
-        bindsym plus  gaps inner current plus 5
-        bindsym minus gaps inner current minus 5
-        bindsym 0     gaps inner current set 0
+    bindsym plus  gaps inner current plus 5
+    bindsym minus gaps inner current minus 5
+    bindsym 0     gaps inner current set 0
 
-        bindsym Shift+plus  gaps inner all plus 5
-        bindsym Shift+minus gaps inner all minus 5
-        bindsym Shift+0     gaps inner all set 0
+    bindsym Shift+plus  gaps inner all plus 5
+    bindsym Shift+minus gaps inner all minus 5
+    bindsym Shift+0     gaps inner all set 0
 
-        bindsym Return mode "$mode_gaps"
-        bindsym Escape mode "default"
+    bindsym Return mode "$mode_gaps"
+    bindsym Escape mode "default"
 }
 mode "$mode_gaps_horiz" {
-        bindsym plus  gaps horizontal current plus 5
-        bindsym minus gaps horizontal current minus 5
-        bindsym 0     gaps horizontal current set 0
+    bindsym plus  gaps horizontal current plus 5
+    bindsym minus gaps horizontal current minus 5
+    bindsym 0     gaps horizontal current set 0
 
-        bindsym Shift+plus  gaps horizontal all plus 5
-        bindsym Shift+minus gaps horizontal all minus 5
-        bindsym Shift+0     gaps horizontal all set 0
+    bindsym Shift+plus  gaps horizontal all plus 5
+    bindsym Shift+minus gaps horizontal all minus 5
+    bindsym Shift+0     gaps horizontal all set 0
 
-        bindsym Return mode "$mode_gaps"
-        bindsym Escape mode "default"
+    bindsym Return mode "$mode_gaps"
+    bindsym Escape mode "default"
 }
 mode "$mode_gaps_verti" {
-        bindsym plus  gaps vertical current plus 5
-        bindsym minus gaps vertical current minus 5
-        bindsym 0     gaps vertical current set 0
+    bindsym plus  gaps vertical current plus 5
+    bindsym minus gaps vertical current minus 5
+    bindsym 0     gaps vertical current set 0
 
-        bindsym Shift+plus  gaps vertical all plus 5
-        bindsym Shift+minus gaps vertical all minus 5
-        bindsym Shift+0     gaps vertical all set 0
+    bindsym Shift+plus  gaps vertical all plus 5
+    bindsym Shift+minus gaps vertical all minus 5
+    bindsym Shift+0     gaps vertical all set 0
 
-        bindsym Return mode "$mode_gaps"
-        bindsym Escape mode "default"
+    bindsym Return mode "$mode_gaps"
+    bindsym Escape mode "default"
 }
 mode "$mode_gaps_top" {
-        bindsym plus  gaps top current plus 5
-        bindsym minus gaps top current minus 5
-        bindsym 0     gaps top current set 0
+    bindsym plus  gaps top current plus 5
+    bindsym minus gaps top current minus 5
+    bindsym 0     gaps top current set 0
 
-        bindsym Shift+plus  gaps top all plus 5
-        bindsym Shift+minus gaps top all minus 5
-        bindsym Shift+0     gaps top all set 0
+    bindsym Shift+plus  gaps top all plus 5
+    bindsym Shift+minus gaps top all minus 5
+    bindsym Shift+0     gaps top all set 0
 
-        bindsym Return mode "$mode_gaps"
-        bindsym Escape mode "default"
+    bindsym Return mode "$mode_gaps"
+    bindsym Escape mode "default"
 }
 mode "$mode_gaps_right" {
-        bindsym plus  gaps right current plus 5
-        bindsym minus gaps right current minus 5
-        bindsym 0     gaps right current set 0
+    bindsym plus  gaps right current plus 5
+    bindsym minus gaps right current minus 5
+    bindsym 0     gaps right current set 0
 
-        bindsym Shift+plus  gaps right all plus 5
-        bindsym Shift+minus gaps right all minus 5
-        bindsym Shift+0     gaps right all set 0
+    bindsym Shift+plus  gaps right all plus 5
+    bindsym Shift+minus gaps right all minus 5
+    bindsym Shift+0     gaps right all set 0
 
-        bindsym Return mode "$mode_gaps"
-        bindsym Escape mode "default"
+    bindsym Return mode "$mode_gaps"
+    bindsym Escape mode "default"
 }
 mode "$mode_gaps_bottom" {
-        bindsym plus  gaps bottom current plus 5
-        bindsym minus gaps bottom current minus 5
-        bindsym 0     gaps bottom current set 0
+    bindsym plus  gaps bottom current plus 5
+    bindsym minus gaps bottom current minus 5
+    bindsym 0     gaps bottom current set 0
 
-        bindsym Shift+plus  gaps bottom all plus 5
-        bindsym Shift+minus gaps bottom all minus 5
-        bindsym Shift+0     gaps bottom all set 0
+    bindsym Shift+plus  gaps bottom all plus 5
+    bindsym Shift+minus gaps bottom all minus 5
+    bindsym Shift+0     gaps bottom all set 0
 
-        bindsym Return mode "$mode_gaps"
-        bindsym Escape mode "default"
+    bindsym Return mode "$mode_gaps"
+    bindsym Escape mode "default"
 }
 mode "$mode_gaps_left" {
-        bindsym plus  gaps left current plus 5
-        bindsym minus gaps left current minus 5
-        bindsym 0     gaps left current set 0
+    bindsym plus  gaps left current plus 5
+    bindsym minus gaps left current minus 5
+    bindsym 0     gaps left current set 0
 
-        bindsym Shift+plus  gaps left all plus 5
-        bindsym Shift+minus gaps left all minus 5
-        bindsym Shift+0     gaps left all set 0
-        bindsym Return mode "$mode_gaps"
-        bindsym Escape mode "default"
+    bindsym Shift+plus  gaps left all plus 5
+    bindsym Shift+minus gaps left all minus 5
+    bindsym Shift+0     gaps left all set 0
+
+    bindsym Return mode "$mode_gaps"
+    bindsym Escape mode "default"
 }
-
-
-
-include /etc/sway/config.d/*
