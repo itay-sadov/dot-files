@@ -1,45 +1,50 @@
 {
-    "layer": "bottom",
-    "position": "bottom",
-    "modules-left": ["sway/workspaces", "sway/mode"],
-    "modules-center": ["sway/window"],
-    "modules-right": ["battery", "clock"],
-    
-    "sway/window": {
-      "max-length": 50,
-			"format": "  {}",
-		},
- 
-"sway/workspaces": {
-         "disable-scroll": true,
-         "all-outputs": true,
-         "format": "{icon}",
-         "format-icons": {
-             "1": "λ",
-             "2": "II",
-             "3": "III",
-             "4": "IV",
-             "5": "V",
-         }
-     },
-
-    
-    "battery": {
-        	"states": {
-            		"warning": 30,
-            		"critical": 15,
-        	},
-        	"format": "  {time}",
-        	"format-charging": "  {time}",
-        	"format-plugged": "  {time}",
-        	"format-alt": "  {capacity}%",
-        	"format-full": "  {capacity}%",
-	},
-
-    "clock": {
-      "format": "  {:%I:%M %p}",
-    	"interval": 60,
-		},
-
+  "layer": "top",
+  "position": "top",
+  "height": 30,
+  "modules-left": [
+    "sway/workspaces",
+    "sway/mode"
+  ],
+  "modules-center": [
+    "sway/window"
+  ],
+  "modules-right": [
+    "battery",
+    "network",
+    "sway/language",
+    "clock"
+  ],
+  "sway/window": {
+    "max-length": 50,
+    "format": "  {}"
+  },
+  "sway/language": {
+    "format": "{shortDescription}",
+    "tooltip-format": "{long}",
+    "max-length": 6
+  },
+  "clock": {
+    "format": " {:%H:%M %d-%m-%Y}"
+  },
+  "battery": {
+    "states": {
+      "warning": 30,
+      "critical": 15
+    },
+    "format": "󰁹 {capacity}%",
+    "format-charging": "󰂄 {capacity}%",
+    "format-plugged": "󰁹 {capacity}%",
+    "format-full": "󰁹 {capacity}%",
+    "tooltip-format": "{time}"
+  },
+  "network": {
+    "format-wifi": "  {essid}",
+    "format-ethernet": "󰈀  LAN",
+    "format-disconnected": "󰖪  OFF",
+    "max-length": 20,
+    "tooltip-format-wifi": "{ifname} • {ipaddr}\n{essid} ({signalStrength}%)",
+    "tooltip-format-ethernet": "{ifname} • {ipaddr}",
+    "tooltip-format-disconnected": "Disconnected"
+  }
 }
-
