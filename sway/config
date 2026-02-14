@@ -57,7 +57,7 @@ input 1267:12584:ASUE1301:00_04F3:3128_Touchpad tap enabled
 
     # Start your launcher
     bindsym $mod+d exec $menu
-    bindsym $mod+Shift+d exec wofi --show drun
+    bindsym $mod+Shift+d exec fuzzel
     # Drag floating windows by holding down $mod and left mouse button.
     # Resize them with right mouse button + $mod.
     # Despite the name, also works for non-floating windows.
@@ -227,7 +227,7 @@ for_window [class="Brave"] move to workspace 2
 for_window [class="discord"] move to workspace 3
 for_window [class="Spotify"] move to workspace 4
 
-# use xwayland 
+# use xwayland
 xwayland enable
 
 # Manual gaps
