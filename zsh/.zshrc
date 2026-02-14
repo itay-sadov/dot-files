@@ -12,6 +12,15 @@ export PATH="$HOME/.npm-global/bin:$PATH"
 
 typeset -U path PATH
 
+# ---- Navigation ----
+setopt AUTO_CD
+cdpath=(~ ~/projects)
+
+# ---- Key bindings ----
+bindkey '^[[1;5D' backward-word        # Ctrl+Left
+bindkey '^[[1;5C' forward-word         # Ctrl+Right
+bindkey '^H'      backward-kill-word   # Ctrl+Backspace
+
 # ---- History ----
 HISTFILE=~/.zsh_history
 HISTSIZE=100000
@@ -31,6 +40,11 @@ if [[ -n ~/.zcompdump(#qN.mh+24) ]]; then
 else
   compinit -C
 fi
+
+eval "$(dircolors -b)"
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
+zstyle ':completion:*' menu select
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 
 # ---- Prompt (Agnoster-style) ----
 setopt PROMPT_SUBST
@@ -123,6 +137,9 @@ alias ip='ip --color=auto'
 
 # ---- Tool hooks ----
 eval "$(direnv hook zsh)"
+source /usr/share/doc/fzf/examples/key-bindings.zsh
+source /usr/share/doc/fzf/examples/completion.zsh
+eval "$(zoxide init zsh)"
 
 # ---- Functions ----
 gwa() {
