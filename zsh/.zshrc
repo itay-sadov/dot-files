@@ -153,26 +153,59 @@ gwa() {
     return 1
   fi
 
-  local folder="${branch//\//-}"
-
-  if git --git-dir=.git rev-parse --verify "$branch" >/dev/null 2>&1 || \
-     git --git-dir=.git rev-parse --verify "origin/$branch" >/dev/null 2>&1; then
-    echo "Creating worktree for existing branch: $branch"
-    git --git-dir=.git worktree add "$folder" "$branch"
-  else
-    echo "Creating new branch and worktree: $branch"
-    git --git-dir=.git worktree add -b "$branch" "$folder" main
+  # Resolve git root so this works from any worktree or subdirectory
+  local git_root
+  git_root=$(git rev-parse --path-format=absolute --git-common-dir 2>/dev/null | sed 's|/\.git$||')
+  if [[ -z "$git_root" ]]; then
+    echo "Error: not inside a git repository"
+    return 1
   fi
 
-  cd "$folder" || return
+  local folder="${branch//\//-}"
+  local worktree_path="$git_root/$folder"
 
-  if [[ -f "../envrc.template" ]]; then
-    ln -sf ../envrc.template .envrc
+  # Bail early if folder already exists
+  if [[ -d "$worktree_path" ]]; then
+    echo "Worktree folder already exists: $worktree_path"
+    cd "$worktree_path" || return
+    return 0
+  fi
+
+  # Fetch latest remote refs
+  git -C "$git_root" fetch --quiet
+
+  if git -C "$git_root" rev-parse --verify "$branch" >/dev/null 2>&1 || \
+     git -C "$git_root" rev-parse --verify "origin/$branch" >/dev/null 2>&1; then
+    echo "Creating worktree for existing branch: $branch"
+    git -C "$git_root" worktree add "$worktree_path" "$branch"
+  else
+    # Detect base branch dynamically
+    local base
+    base=$(git -C "$git_root" symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's|refs/remotes/origin/||')
+    if [[ -z "$base" ]]; then
+      if git -C "$git_root" rev-parse --verify main >/dev/null 2>&1; then
+        base=main
+      elif git -C "$git_root" rev-parse --verify master >/dev/null 2>&1; then
+        base=master
+      else
+        echo "Error: cannot determine base branch"
+        return 1
+      fi
+    fi
+    echo "Creating new branch and worktree: $branch (based on $base)"
+    git -C "$git_root" worktree add -b "$branch" "$worktree_path" "origin/$base"
+    git -C "$git_root" branch --set-upstream-to="origin/$base" "$branch"
+  fi
+
+  cd "$worktree_path" || return
+
+  if [[ -f "$git_root/envrc.template" ]]; then
+    ln -sf "$git_root/envrc.template" .envrc
     echo "Linked envrc.template"
   fi
 
   direnv allow
-  echo "Worktree ready in: $folder"
+  echo "Worktree ready in: $worktree_path"
 }
 
 gclone() {
