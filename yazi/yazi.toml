@@ -1,3 +1,6 @@
+[mgr]
+ratio = [3, 3, 4]
+
 [opener]
 vscode = [
 	{ run = 'code "$@"', orphan = true, desc = "VSCode" },
