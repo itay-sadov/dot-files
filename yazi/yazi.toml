@@ -1,20 +1,29 @@
 [opener]
-open = [
-	{ run = 'xdg-open "$@"', orphan = true, desc = "Open", for = "linux" },
+vscode = [
+	{ run = 'code "$@"', orphan = true, desc = "VSCode" },
 ]
-edit = [
-	{ run = '${EDITOR:-vi} "$@"', block = true, desc = "Edit" },
+vim = [
+	{ run = 'vim "$@"', block = true, desc = "Vim" },
+]
+imv = [
+	{ run = 'imv "$@"', orphan = true, desc = "imv" },
+]
+vlc = [
+	{ run = 'vlc "$@"', orphan = true, desc = "VLC" },
+]
+firefox = [
+	{ run = 'firefox "$@"', orphan = true, desc = "Firefox" },
 ]
 
 [open]
 rules = [
-	{ url = "*/", use = [ "edit", "open", "reveal" ] },
-	{ mime = "text/*", use = [ "open", "edit", "reveal" ] },
-	{ mime = "image/*", use = [ "open", "reveal" ] },
-	{ mime = "{audio,video}/*", use = [ "open", "reveal" ] },
-	{ mime = "application/pdf", use = [ "open", "reveal" ] },
-	{ mime = "application/{json,ndjson}", use = [ "open", "edit", "reveal" ] },
-	{ mime = "*/javascript", use = [ "open", "edit", "reveal" ] },
-	{ mime = "inode/empty", use = [ "edit", "reveal" ] },
-	{ url = "*", use = [ "open", "reveal" ] },
+	{ url = "*/", use = [ "edit", "open" ] },
+	{ mime = "text/*", use = [ "vim", "vscode" ] },
+	{ mime = "image/*", use = [ "imv" ] },
+	{ mime = "{audio,video}/*", use = [ "vlc" ] },
+	{ mime = "application/pdf", use = [ "firefox" ] },
+	{ mime = "application/{json,ndjson}", use = [ "vim", "vscode" ] },
+	{ mime = "*/javascript", use = [ "vim", "vscode" ] },
+	{ mime = "inode/empty", use = [ "vim", "vscode" ] },
+	{ url = "*", use = [ "vim", "vscode" ] },
 ]
