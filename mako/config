@@ -9,7 +9,7 @@ padding=15
 margin=10
 border-size=1
 border-radius=10
-default-timeout=0
+default-timeout=5000
 anchor=top-right
 layer=overlay
 
@@ -21,4 +21,6 @@ border-color=#bb9af7
 
 [urgency=high]
 border-color=#f7768e
+
+[app-name="Claude Code"]
 default-timeout=0
