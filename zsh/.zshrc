@@ -9,6 +9,10 @@ fi
 
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.npm-global/bin:$PATH"
+export PATH="$HOME/.cargo/bin:$PATH"
+
+export EDITOR="code --wait"
+export VISUAL="code --wait"
 
 typeset -U path PATH
 
