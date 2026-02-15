@@ -1,0 +1,17 @@
+[general]
+early-exit = true
+corner-roundness = 10
+initial-tool = "brush"
+copy-command = "wl-copy"
+annotation-size-factor = 2
+save-after-copy = false
+no-window-decoration = true
+actions-on-enter = ["save-to-clipboard"]
+actions-on-escape = ["exit"]
+
+[font]
+family = "JetBrainsMono Nerd Font"
+style = "Regular"
+
+[color-palette]
+palette = ["#f7768e", "#9ece6a", "#7aa2f7", "#bb9af7", "#e0af68", "#a9b1d6"]
