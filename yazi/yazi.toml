@@ -17,10 +17,17 @@ vlc = [
 firefox = [
 	{ run = 'firefox "$@"', orphan = true, desc = "Firefox" },
 ]
+glow = [
+	{ run = 'glow -p "$@"', block = true, desc = "Glow" },
+]
 
 [open]
 rules = [
 	{ url = "*/", use = [ "edit", "open" ] },
+	{ url = "*.md", use = [ "glow", "vim", "vscode" ] },
+	{ url = "*.markdown", use = [ "glow", "vim", "vscode" ] },
+	{ mime = "text/markdown", use = [ "glow", "vim", "vscode" ] },
+	{ mime = "text/x-markdown", use = [ "glow", "vim", "vscode" ] },
 	{ mime = "text/*", use = [ "vim", "vscode" ] },
 	{ mime = "image/*", use = [ "imv" ] },
 	{ mime = "{audio,video}/*", use = [ "vlc" ] },

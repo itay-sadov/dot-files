@@ -29,7 +29,7 @@ set $menu fuzzel
 
 exec_always {
     gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
-    gsettings set org.gnome.desktop.interface gtk-theme 'Yaru-dark'
+    gsettings set org.gnome.desktop.interface gtk-theme 'Tokyonight-Dark'
     gsettings set org.gnome.desktop.interface icon-theme 'Papirus-Dark'
 }
 exec export ADW_DEBUG_COLOR_SCHEME=prefer-dark && dbus-update-activation-environment --systemd WAYLAND_DISPLAY SWAYSOCK DISPLAY XDG_CURRENT_DESKTOP ADW_DEBUG_COLOR_SCHEME
