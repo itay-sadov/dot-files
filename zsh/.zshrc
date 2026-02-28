@@ -38,6 +38,7 @@ setopt INC_APPEND_HISTORY
 setopt SHARE_HISTORY
 
 # ---- Completion ----
+fpath=(~/builds/zsh-claudecode-completion $fpath)
 autoload -Uz compinit
 if [[ -n ~/.zcompdump(#qN.mh+24) ]]; then
   compinit
