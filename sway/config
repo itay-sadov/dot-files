@@ -260,6 +260,7 @@ for_window [app_id="yazi-picker"] floating enable, resize set 1200 800
 for_window [app_id="code" title="^Open"] floating enable, border pixel 2, resize set 800 600
 for_window [app_id="code" title="^Save"] floating enable, border pixel 2, resize set 800 600
 for_window [app_id="code"] opacity 0.95
+for_window [app_id="dev.zed.Zed"] blur disable
 
 # Borders (thin)
 default_border pixel 2
