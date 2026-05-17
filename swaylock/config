@@ -2,14 +2,14 @@
 # Reference: man 5 swaylock
 
 daemonize
-ignore-empty-password
 show-failed-attempts
 
 # Background (solid Tokyo Night bg)
 color=1a1b26
 
-# Indicator (the ring shown when typing)
+# Indicator (the ring shown even when idle, so user sees lock UI immediately)
 indicator
+indicator-idle-visible
 indicator-radius=110
 indicator-thickness=8
 indicator-caps-lock
