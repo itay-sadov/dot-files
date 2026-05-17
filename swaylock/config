@@ -1,0 +1,53 @@
+# Tokyo Night themed swaylock config
+# Reference: man 5 swaylock
+
+daemonize
+ignore-empty-password
+show-failed-attempts
+
+# Background (solid Tokyo Night bg)
+color=1a1b26
+
+# Indicator (the ring shown when typing)
+indicator
+indicator-radius=110
+indicator-thickness=8
+indicator-caps-lock
+
+# Ring colors per state
+ring-color=7aa2f7
+ring-clear-color=e0af68
+ring-ver-color=9ece6a
+ring-wrong-color=f7768e
+ring-caps-lock-color=ff9e64
+
+# Inside of the ring (semi-transparent dark)
+inside-color=1a1b26cc
+inside-clear-color=1a1b26cc
+inside-ver-color=1a1b26cc
+inside-wrong-color=1a1b26cc
+inside-caps-lock-color=1a1b26cc
+
+# Key press highlights
+key-hl-color=bb9af7
+bs-hl-color=f7768e
+caps-lock-key-hl-color=bb9af7
+caps-lock-bs-hl-color=f7768e
+
+# Text colors (inside the ring)
+text-color=c0caf5
+text-clear-color=c0caf5
+text-ver-color=c0caf5
+text-wrong-color=c0caf5
+text-caps-lock-color=c0caf5
+
+# Hide the outer separator line
+line-color=00000000
+line-clear-color=00000000
+line-ver-color=00000000
+line-wrong-color=00000000
+line-caps-lock-color=00000000
+separator-color=00000000
+
+font=monospace
+font-size=24

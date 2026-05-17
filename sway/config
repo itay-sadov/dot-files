@@ -65,9 +65,9 @@ blur_radius 5
 #
 # Lock after 5 min idle, blank screens after 10 min, lock on suspend.
 exec swayidle -w \
-         timeout 300 'swaylock -f -c 000000' \
+         timeout 300 'swaylock -f' \
          timeout 600 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
-         before-sleep 'swaylock -f -c 000000'
+         before-sleep 'swaylock -f'
 
 ### Input configuration
 #
@@ -117,7 +117,7 @@ input * {
     bindsym $mod+Shift+e exec wlogout
 
     # Lock screen
-    bindsym $mod+Escape exec swaylock -f -c 000000
+    bindsym $mod+Escape exec swaylock -f
 #
 # Moving around:
 #
