@@ -17,11 +17,29 @@ out="$5"
 yazi="$HOME/.cargo/bin/yazi"
 
 if [ "$save" = "1" ]; then
+    # Save flow: user picks a target directory in yazi; we append the
+    # caller-suggested filename so the original name (e.g. FB_IMG_1234.jpg)
+    # is preserved automatically — no manual typing.
     save_dir="$(dirname "$path")"
-    /usr/bin/foot --app-id=yazi-picker -- "$yazi" --chooser-file="$out" "$save_dir"
-    if [ ! -s "$out" ]; then
-        rm -f "$path"
+    filename="$(basename "$path")"
+
+    # Remove the placeholder that termfilechooser pre-creates; we'll write
+    # the real target path to $out ourselves.
+    [ -f "$path" ] && [ ! -s "$path" ] && rm -f "$path"
+
+    picked="$(mktemp)"
+    /usr/bin/foot --app-id=yazi-picker -- \
+        "$yazi" --chooser-file="$picked" --cwd-file="$picked" "$save_dir"
+
+    if [ -s "$picked" ]; then
+        chosen="$(head -n1 "$picked")"
+        # If the user selected a file, use its parent directory.
+        if [ -f "$chosen" ]; then
+            chosen="$(dirname "$chosen")"
+        fi
+        printf '%s/%s\n' "$chosen" "$filename" > "$out"
     fi
+    rm -f "$picked"
 elif [ "$directory" = "1" ]; then
     /usr/bin/foot --app-id=yazi-picker -- "$yazi" --chooser-file="$out" --cwd-file="$out"
 else
