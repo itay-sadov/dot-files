@@ -134,10 +134,6 @@ alias egrep='egrep --color=auto'
 alias diff='diff --color=auto'
 alias ip='ip --color=auto'
 
-alias claude-dev='claude --system-prompt "$(cat /home/itay-sadovnik/.claude/contexts/dev.md)"'
-alias claude-research='claude --system-prompt "$(cat /home/itay-sadovnik/.claude/contexts/research.md)"'
-alias claude-review='claude --system-prompt "$(cat /home/itay-sadovnik/.claude/contexts/review.md)"'
-
 # ---- Plugins ----
 [[ -f /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]] && \
   source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
