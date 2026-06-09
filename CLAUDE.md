@@ -8,7 +8,8 @@ Personal dotfiles for a SwayFX + zsh desktop setup. Live configs are symlinked t
 - `foot/` — terminal emulator
 - `fuzzel/` — application launcher
 - `zsh/` — zsh config (`.zshrc`)
-- `gtk-3.0/`, `gtk-4.0/` — GTK theme (Tokyonight-Dark) + libadwaita
+- `gtk-3.0/`, `gtk-4.0/` — GTK user CSS overrides (Tokyonight-Dark) + libadwaita
+- `themes/Tokyonight-Dark/` — full GTK/Cinnamon/etc. theme; symlinked to `~/.themes/Tokyonight-Dark`
 - `mako/` — notification daemon
 - `satty/` — screenshot annotation tool
 - `yazi/` — terminal file manager (Tokyo Night flavor)
@@ -18,4 +19,5 @@ Personal dotfiles for a SwayFX + zsh desktop setup. Live configs are symlinked t
 ## Workflow
 - All live configs in `~/.config/` are symlinked to this repo
 - Exception: `zsh/.zshrc` is symlinked from `~/.zshrc`
+- Exception: `themes/Tokyonight-Dark/` is symlinked from `~/.themes/Tokyonight-Dark`
 - System tools built from source live in `~/builds/` (swayfx, libinput, yazi, xdg-desktop-portal-termfilechooser)
