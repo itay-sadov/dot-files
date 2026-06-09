@@ -7909,7 +7909,7 @@ preferencesgroup > box button.accent-button {
   min-width: 24px;
   padding: 3px;
   border-radius: 9px;
-  background: var(--accent-bg-color);
+  background: @accent_bg_color;
   outline: none;
   background-clip: content-box;
   box-shadow: none;
@@ -7923,46 +7923,40 @@ preferencesgroup > box button.accent-button:checked {
   box-shadow: 0 0 0 3px #27a1b9;
 }
 
-preferencesgroup > box button.accent-button.blue, preferencesgroup > box button.accent-button.teal, preferencesgroup > box button.accent-button.green, preferencesgroup > box button.accent-button.yellow, preferencesgroup > box button.accent-button.orange, preferencesgroup > box button.accent-button.red, preferencesgroup > box button.accent-button.pink, preferencesgroup > box button.accent-button.purple, preferencesgroup > box button.accent-button.slate {
-  --accent-color: oklab(
-				from var(--accent-bg-color) var(--standalone-color-oklab)
-			);
-}
-
 preferencesgroup > box button.accent-button.blue {
-  --accent-bg-color: var(--accent-blue);
+  background: #7aa2f7;
 }
 
 preferencesgroup > box button.accent-button.teal {
-  --accent-bg-color: var(--accent-teal);
+  background: #2ac3de;
 }
 
 preferencesgroup > box button.accent-button.green {
-  --accent-bg-color: var(--accent-green);
+  background: #9ece6a;
 }
 
 preferencesgroup > box button.accent-button.yellow {
-  --accent-bg-color: var(--accent-yellow);
+  background: #e0af68;
 }
 
 preferencesgroup > box button.accent-button.orange {
-  --accent-bg-color: var(--accent-orange);
+  background: #ff9e64;
 }
 
 preferencesgroup > box button.accent-button.red {
-  --accent-bg-color: var(--accent-red);
+  background: #f7768e;
 }
 
 preferencesgroup > box button.accent-button.pink {
-  --accent-bg-color: var(--accent-pink);
+  background: #ff007c;
 }
 
 preferencesgroup > box button.accent-button.purple {
-  --accent-bg-color: var(--accent-purple);
+  background: #bb9af7;
 }
 
 preferencesgroup > box button.accent-button.slate {
-  --accent-bg-color: var(--accent-slate);
+  background: #565f89;
 }
 
 preferencesgroup > box box > list.boxed-list-separate {
