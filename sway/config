@@ -173,9 +173,9 @@ input * {
 # Layout stuff:
 #
     # You can "split" the current object of your focus with
-    # $mod+b or $mod+v, for horizontal and vertical splits
+    # $mod+Shift+v or $mod+v, for horizontal and vertical splits
     # respectively.
-    bindsym $mod+b split h
+    bindsym $mod+Shift+v split h
     bindsym $mod+v split v
 
     # Switch the current container between different layout styles
@@ -233,6 +233,7 @@ bindsym $mod+r mode "resize"
 bindsym Print exec bash -lc 'f="$(mktemp --suffix=.png)"; grim -g "$(slurp)" "$f" && satty --filename "$f"'
 bindsym Mod1+e exec foot --app-id=yazi -- $HOME/.cargo/bin/yazi
 bindsym $mod+n exec nautilus --new-window
+bindsym $mod+Shift+b exec foot --app-id=bluetuith -- $HOME/.local/bin/bluetuith
 
 #
 # Media / function keys
@@ -276,6 +277,7 @@ bar {
 for_window [app_id="com.gabm.satty"] floating enable
 for_window [app_id="org.gnome.Nautilus"] floating enable, resize set 1100 700
 for_window [app_id="yazi-picker"] floating enable, resize set 1200 800
+for_window [app_id="bluetuith"] floating enable, resize set 1000 700
 for_window [app_id="code" title="^Open"] floating enable, border pixel 2, resize set 800 600
 for_window [app_id="code" title="^Save"] floating enable, border pixel 2, resize set 800 600
 for_window [app_id="code"] opacity 0.95

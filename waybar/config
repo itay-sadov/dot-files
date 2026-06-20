@@ -11,6 +11,7 @@
   ],
   "modules-right": [
     "battery",
+    "bluetooth",
     "network",
     "sway/language",
     "clock"
@@ -37,6 +38,16 @@
     "format-plugged": "󰁹 {capacity}%",
     "format-full": "󰁹 {capacity}%",
     "tooltip-format": "{time}"
+  },
+  "bluetooth": {
+    "format": "󰂯 {status}",
+    "format-connected": "󰂱 {device_alias}",
+    "format-disabled": "󰂲",
+    "format-off": "󰂲",
+    "tooltip-format": "{controller_alias}\n{num_connections} connected",
+    "tooltip-format-connected": "{controller_alias}\n{num_connections} connected\n\n{device_enumerate}",
+    "tooltip-format-enumerate-connected": "{device_alias}",
+    "on-click": "foot --app-id=bluetuith -- $HOME/.local/bin/bluetuith"
   },
   "network": {
     "format-wifi": "  {essid}",

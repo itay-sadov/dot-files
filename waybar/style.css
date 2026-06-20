@@ -15,11 +15,23 @@ window#waybar {
 #workspaces,
 #clock,
 #battery,
+#bluetooth,
 #network,
 #language {
   background-color: #1a1b26;
   padding: 0 10px;
   margin: 2px 4px 4px 4px;
+}
+
+#bluetooth {
+  color: #1a1b26;
+  background-color: #7dcfff;
+  border-radius: 10px;
+}
+
+#bluetooth.disabled,
+#bluetooth.off {
+  background-color: #565f89;
 }
 
 #network {
