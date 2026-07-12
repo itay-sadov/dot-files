@@ -87,6 +87,9 @@ input * {
     xkb_layout us,il
 }
 
+# Disable touchpad while an external mouse is connected
+exec_always $HOME/.config/sway/touchpad-auto.sh
+
 ### Key bindings
 #
 # Basics:
@@ -231,6 +234,7 @@ mode "resize" {
 }
 bindsym $mod+r mode "resize"
 bindsym Print exec bash -lc 'f="$(mktemp --suffix=.png)"; grim -g "$(slurp)" "$f" && satty --filename "$f"'
+bindsym Shift+Print exec bash -lc 'f="$(mktemp --suffix=.png)"; grim "$f" && satty --filename "$f"'
 bindsym Mod1+e exec foot --app-id=yazi -- $HOME/.cargo/bin/yazi
 bindsym $mod+n exec nautilus --new-window
 bindsym $mod+Shift+b exec foot --app-id=bluetuith -- $HOME/.local/bin/bluetuith
