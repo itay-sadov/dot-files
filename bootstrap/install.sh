@@ -3,7 +3,7 @@
 # Safe to re-run: every step is idempotent.
 #
 # What this does NOT do (see CLAUDE.md "Not tracked" / "Hand-built tools" sections):
-#   - build swayfx/libinput/yazi/etc. from source in ~/builds/
+#   - build swayfx/libinput/etc. from source in ~/builds/
 #   - set up SSH/GPG keys or git identity
 #   - download bluetuith's release binary
 set -euo pipefail
@@ -25,12 +25,15 @@ link() {
     echo "linked $dst -> $src"
 }
 
+echo "==> Enabling tracked git hooks (pre-commit drift check)"
+git -C "$REPO_DIR" config --local core.hooksPath bootstrap/git-hooks
+
 echo "==> Installing apt packages from packages/apt-manual.txt"
 sudo apt update
 xargs -a packages/apt-manual.txt sudo apt install -y
 
 echo "==> Linking whole config directories"
-for d in waybar mako fuzzel yazi; do
+for d in waybar mako fuzzel wob; do
     link "$REPO_DIR/$d" "$HOME/.config/$d"
 done
 

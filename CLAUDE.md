@@ -11,16 +11,29 @@ Personal dotfiles for a SwayFX + zsh desktop setup on Ubuntu 24.04. Live configs
 - `gtk-3.0/`, `gtk-4.0/` — GTK user CSS overrides (Tokyonight-Dark) + libadwaita
 - `themes/Tokyonight-Dark/` — full GTK/Cinnamon/etc. theme; symlinked to `~/.themes/Tokyonight-Dark`
 - `mako/` — notification daemon
+- `wob/` — Wayland overlay bar (`wob.ini`); on-screen volume level bar. Fed by `sway/volume-notify.sh` through a fifo that a `wob` process (started via `exec_always` in `sway/config`) tails. Volume media keys call the script instead of `wpctl` directly. `wob` is an apt package.
 - `satty/` — screenshot annotation tool
 - `swaylock/` — lock screen config
-- `yazi/` — terminal file manager (Tokyo Night flavor)
 - `xdg-desktop-portal/` — portal routing (`portals.conf`, currently routes FileChooser to `xdg-desktop-portal-gtk`)
 - `session/` — SwayFX login-session desktop entry (see System-level files below)
 - `etc/sway-config.d/` — tracked copy of `/etc/sway/config.d/50-systemd-user.conf` (see System-level files below)
 - `packages/apt-manual.txt` — `apt-mark showmanual` snapshot for rebuilding package selection on a new machine
 
+## Maintenance contract (keep the repo rebuildable)
+Every change to this repo must leave it self-consistent, so `bootstrap/install.sh` on a fresh machine reproduces the current setup. After **any** change, before finishing:
+1. **Add/remove a config dir** → wire it into `bootstrap/install.sh` (whole-dir list or per-file list) *and* document it in this file's Structure/Workflow sections. Removing one → drop it from both, and `git rm` the tracked dir + remove the stale `~/.config` symlink.
+2. **Add a script under `sway/`** → also add its per-file symlink to `install.sh` (see the `sway/` note below).
+3. **Install/remove an apt package you rely on** → regenerate the snapshot: `apt-mark showmanual | sort > packages/apt-manual.txt`.
+4. **New system-level file** (needs sudo / lives outside `~/.config`) → track its content in-repo and add a `sudo install` step to `install.sh`.
+
+This is enforced, not just documented:
+- `bootstrap/check-drift.sh` — verifies every config dir is both symlinked by `install.sh` and mentioned here, flags dirs `install.sh` links but that no longer exist, and warns if the apt snapshot is stale. Run it anytime.
+- **Stop hook** (`bootstrap/stop-hook.sh`, wired in `.claude/settings.json`) — runs the checker when a Claude Code session ends; on drift it blocks and feeds the report back so it gets fixed before finishing.
+- **pre-commit hook** (`bootstrap/git-hooks/pre-commit`, enabled via `core.hooksPath` by `install.sh`) — hard-fails a commit that leaves the repo inconsistent.
+
 ## Workflow
-- Live configs in `~/.config/` are symlinked to this repo, but **per-file, not always per-directory**: most tools (`waybar`, `mako`, `fuzzel`, `yazi`) have their whole `~/.config/<tool>` directory symlinked to the repo. `foot` and `gtk-3.0` symlink only the individual config file (`foot.ini`, `settings.ini`) because the live directory also holds local-only files that must NOT be tracked (`~/.config/gtk-3.0/bookmarks` — GTK file-chooser bookmarks; `~/.config/foot/foot.bak_*` — disposable local backups). Don't "fix" these into whole-directory symlinks — it would pull machine-local state into the repo.
+- Live configs in `~/.config/` are symlinked to this repo, but **per-file, not always per-directory**: most tools (`waybar`, `mako`, `fuzzel`, `wob`) have their whole `~/.config/<tool>` directory symlinked to the repo. `foot` and `gtk-3.0` symlink only the individual config file (`foot.ini`, `settings.ini`) because the live directory also holds local-only files that must NOT be tracked (`~/.config/gtk-3.0/bookmarks` — GTK file-chooser bookmarks; `~/.config/foot/foot.bak_*` — disposable local backups). Don't "fix" these into whole-directory symlinks — it would pull machine-local state into the repo.
+- `sway/` is symlinked **per-file** (`~/.config/sway/config`, `touchpad-auto.sh`, `volume-notify.sh`), not whole-directory. Adding a new script under `sway/` means it also needs its own symlink into `~/.config/sway/` — a `bindsym`/`exec` referencing `~/.config/sway/<script>` silently no-ops if that symlink is missing.
 - Exception: `zsh/.zshrc` is symlinked from `~/.zshrc`
 - Exception: `themes/Tokyonight-Dark/` is symlinked from `~/.themes/Tokyonight-Dark`
 - Portal file picker: the repo used to route through a hand-built `xdg-desktop-portal-termfilechooser` (yazi-in-a-terminal picker). It was replaced by the stock `xdg-desktop-portal-gtk` apt package (see git history of `xdg-desktop-portal/`). The termfilechooser source is still in `~/builds/` but its systemd service is inactive/unused — don't reactivate config for it without re-checking whether that migration should be reverted.
@@ -45,7 +58,6 @@ Each is a real git clone pinned to a specific ref — `cd ~/builds/<tool> && git
 
 - **swayfx** — https://github.com/WillPower3309/swayfx, tag `0.5.3`. Build: `meson setup build --prefix=/usr/local && ninja -C build && sudo ninja -C build install`. **Local patch required beyond upstream:** in `meson.build`, `wlroots_features['xwayland']` must be flipped from `false` to `true`, and `subprojects/wlroots` rebuilt standalone first (`cd subprojects/wlroots && meson setup build --prefix=/usr/local && ninja -C build && sudo ninja -C build install`) before rebuilding swayfx — otherwise XWayland apps (e.g. Chrome) fail to launch. This patch is not committed anywhere (working tree only) — reapply it after a fresh clone. Also needs `sudo apt install libxcb-icccm4-dev libxcb-composite0-dev libxcb-res0-dev libxcb-render-util0-dev libxcb-ewmh-dev` for the xwayland build, and `sudo apt install swaybg` separately (the apt `sway` package used to pull it in as a dependency; building from source doesn't). See "System-level files" above for the two other post-install fixes this build needs (session file, systemd-user.conf).
 - **libinput** — https://gitlab.freedesktop.org/libinput/libinput.git, tag `1.26.0`. Standard meson build.
-- **yazi** — https://github.com/sxyazi/yazi.git, currently built at a post-nightly commit (not a tagged release — check `git log -1` before rebuilding). Build: `cargo build --release`.
 - **xdg-desktop-portal-termfilechooser** — https://github.com/GermainZ/xdg-desktop-portal-termfilechooser.git. **Currently unused/dormant** (see Workflow section) — kept around in case the yazi-based file picker is revived. Meson build if needed.
 - **Tokyonight-GTK-Theme** — https://github.com/Fausto-Korpsvart/Tokyonight-GTK-Theme.git. Source of the vendored `themes/Tokyonight-Dark/` theme (already committed to this repo — this build dir is only needed if regenerating from the theme's install script).
 - **zsh-claudecode-completion** — https://github.com/wbingli/zsh-claudecode-completion. Zsh completions for the Claude Code CLI, sourced from `.zshrc`.

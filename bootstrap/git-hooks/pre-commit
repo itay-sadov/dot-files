@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Tracked pre-commit hook. Enabled via `git config core.hooksPath bootstrap/git-hooks`
+# (done by bootstrap/install.sh on a fresh clone). Blocks a commit that leaves the
+# repo's config dirs out of sync with install.sh / CLAUDE.md.
+exec "$(git rev-parse --show-toplevel)/bootstrap/check-drift.sh"
