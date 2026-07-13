@@ -194,6 +194,7 @@ wev
 wget
 wl-clipboard
 wlogout
+wob
 xfonts-cyrillic
 xfonts-scalable
 xvfb
