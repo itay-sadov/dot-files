@@ -28,7 +28,7 @@ Every change to this repo must leave it self-consistent, so `bootstrap/install.s
 
 This is enforced, not just documented:
 - `bootstrap/check-drift.sh` — verifies every config dir is both symlinked by `install.sh` and mentioned here, flags dirs `install.sh` links but that no longer exist, and warns if the apt snapshot is stale. Run it anytime.
-- **Stop hook** (`bootstrap/stop-hook.sh`, wired in `.claude/settings.json`) — runs the checker when a Claude Code session ends; on drift it blocks and feeds the report back so it gets fixed before finishing.
+- **Stop hook** (`bootstrap/stop-hook.sh`, wired in `.claude/settings.json`) — runs the checker at the end of a Claude Code turn; on drift it blocks and feeds the report back so it gets fixed before finishing. It only fires for turns that actually wrote to this repo (a `Write`/`Edit` under the repo root, per the transcript) — a read-only or purely conversational turn is never hijacked into fixing pre-existing drift. Writes made only through `Bash` heredocs slip past that gate; the pre-commit hook is the hard backstop.
 - **pre-commit hook** (`bootstrap/git-hooks/pre-commit`, enabled via `core.hooksPath` by `install.sh`) — hard-fails a commit that leaves the repo inconsistent.
 
 ## Workflow

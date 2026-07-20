@@ -18,8 +18,8 @@ APT_SNAPSHOT="packages/apt-manual.txt"
 
 # Top-level entries that are NOT ~/.config config directories.
 # (bootstrap=scripts, packages=apt list, session/etc=system files, themes=~/.themes,
-#  zsh=~/.zshrc, .claude/.git=tooling.)
-NON_CONFIG="bootstrap packages session etc themes zsh .claude .git"
+#  zsh=~/.zshrc, .claude/.git=tooling, shared=gitignored reaper runtime state.)
+NON_CONFIG="bootstrap packages session etc themes zsh .claude .git shared"
 
 errors=0
 warns=0

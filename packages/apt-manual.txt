@@ -15,6 +15,7 @@ docker.io
 efibootmgr
 eza
 fatrace
+ffmpeg
 file
 findutils
 firefox
