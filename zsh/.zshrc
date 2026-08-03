@@ -10,6 +10,7 @@ fi
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.npm-global/bin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
+export PATH="$HOME/projects/OnIt/deployer/bin:$PATH"
 
 export EDITOR="code --wait"
 export VISUAL="code --wait"
@@ -151,6 +152,9 @@ source /usr/share/doc/fzf/examples/completion.zsh
 eval "$(zoxide init zsh)"
 
 # ---- Functions ----
+# onit-deploy now lives in-repo: OnIt/deployer/bin/onit-deploy (on
+# $PATH above). See that script / deployer/README.md for usage.
+
 gwa() {
   local branch=$1
   if [[ -z "$branch" ]]; then
