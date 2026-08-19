@@ -15,6 +15,9 @@ export PATH="$HOME/projects/OnIt/deployer/bin:$PATH"
 export EDITOR="code --wait"
 export VISUAL="code --wait"
 
+# Machine-local secrets/overrides, not tracked in this repo
+[[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
+
 typeset -U path PATH
 
 # ---- Navigation ----
@@ -138,6 +141,7 @@ alias ip='ip --color=auto'
 alias claude-dev='claude --system-prompt "$(cat /home/itay-sadovnik/.claude/contexts/dev.md)"'
 alias claude-research='claude --system-prompt "$(cat /home/itay-sadovnik/.claude/contexts/research.md)"'
 alias claude-review='claude --system-prompt "$(cat /home/itay-sadovnik/.claude/contexts/review.md)"'
+alias claude-2nd='CLAUDE_CONFIG_DIR=/home/itay-sadovnik/.claude-secondary /home/itay-sadovnik/.local/bin/claude'
 
 # ---- Plugins ----
 [[ -f /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]] && \

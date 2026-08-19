@@ -65,3 +65,4 @@ Each is a real git clone pinned to a specific ref — `cd ~/builds/<tool> && git
 
 ## Not tracked (deliberately manual)
 - SSH keys, GPG keys, git commit identity/signing config — set these up by hand on a new machine, never commit them here.
+- `~/.zshrc.local` — machine-local secrets/overrides. `zsh/.zshrc` sources it if present; create it by hand per machine, never track it here.
