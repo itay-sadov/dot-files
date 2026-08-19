@@ -233,8 +233,9 @@ mode "resize" {
     bindsym Escape mode "default"
 }
 bindsym $mod+r mode "resize"
-bindsym Print exec bash -lc 'f="$(mktemp --suffix=.png)"; grim -g "$(slurp)" "$f" && satty --filename "$f"'
-bindsym Shift+Print exec bash -lc 'f="$(mktemp --suffix=.png)"; grim "$f" && satty --filename "$f"'
+bindsym Print exec bash -lc 'f="$(mktemp --suffix=.png)"; grim -g "$(slurp)" "$f" && satty --filename "$f" --resize smart'
+bindsym Shift+Print exec bash -lc 'f="$(mktemp --suffix=.png)"; grim "$f" && satty --filename "$f" --resize smart'
+bindsym Ctrl+Print exec bash -lc 'wl-paste --type image/png | satty --filename - --resize smart'
 bindsym $mod+n exec nautilus --new-window
 bindsym $mod+Shift+b exec foot --app-id=bluetuith -- $HOME/.local/bin/bluetuith
 
@@ -281,7 +282,7 @@ bar {
 }
 
 
-for_window [app_id="com.gabm.satty"] floating enable
+for_window [app_id="com.gabm.satty"] floating enable, move position center
 for_window [app_id="org.gnome.Nautilus"] floating enable, resize set 1100 700
 for_window [app_id="bluetuith"] floating enable, resize set 1000 700
 for_window [app_id="code" title="^Open"] floating enable, border pixel 2, resize set 800 600
