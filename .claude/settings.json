@@ -1,5 +1,19 @@
 {
   "worktree": { "bgIsolation": "none" },
+  "permissions": {
+    "allow": [
+      "Bash(dpkg -l:*)",
+      "Bash(bluetoothctl devices)",
+      "Bash(bluetoothctl devices Connected)",
+      "Bash(bluetoothctl devices Paired)",
+      "Bash(bluetoothctl devices Bonded)",
+      "Bash(bluetoothctl devices Trusted)",
+      "Bash(command -v:*)",
+      "Bash(systemctl --user status xdg-desktop-portal-termfilechooser --no-pager)",
+      "Bash(systemctl --user cat xdg-desktop-portal-gnome.service)",
+      "Bash(apt-mark showmanual)"
+    ]
+  },
   "hooks": {
     "Stop": [
       {
